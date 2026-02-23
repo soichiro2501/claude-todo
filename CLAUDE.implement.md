@@ -83,3 +83,25 @@ export function useCounter() {
 - コンポーネントの動的インポートは `defineAsyncComponent` を使う
 - `v-for` には必ず `:key` を指定する（インデックスは最終手段）
 - 不要な `watchEffect` / `watch` は作らない
+
+---
+
+## Tailwind CSS v4 + shadcn/ui 実装ルール
+
+### Tailwind CSS v4
+- テーマのカスタマイズはCSSファイル内の `@theme` ディレクティブで行う（`tailwind.config.ts` は使わない）
+- カスタムカラーや変数は `app/assets/css/main.css` の `@theme` ブロックに定義する
+- ユーティリティクラスは公式推奨順（レイアウト → ボックスモデル → タイポグラフィ → 見た目）で並べる
+
+### shadcn/ui
+- コンポーネントは `app/components/ui/` に配置する（shadcnのデフォルトに合わせる）
+- コンポーネントの追加は `pnpm dlx shadcn@latest add <component>` を使う
+- カスタマイズはコンポーネントファイルを直接編集する（ラッパーを作らない）
+- クラスの結合には `cn()` ユーティリティ（`clsx` + `tailwind-merge`）を使う
+
+```ts
+import { cn } from '@/lib/utils'
+
+// Good
+const classes = cn('base-class', isActive && 'active-class', props.class)
+```
