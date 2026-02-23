@@ -74,10 +74,22 @@ export function useCounter() {
 - 環境変数は `useRuntimeConfig` で参照する（`process.env` は直接使わない）
 - ミドルウェアは `app/middleware/` に配置し、`defineNuxtRouteMiddleware` を使う
 
+### SSR安全性
+- `document` / `window` へのアクセスは `onMounted` か `import.meta.client` で保護する
+- SSR安全なグローバル状態には `useState()` を使う（`ref()` をモジュールスコープに置かない）
+- 内部遷移には `<NuxtLink>` を使う（`<a>` タグは外部リンクのみ）
+
 ### エラーハンドリング
 - サーバーエラーは `createError` でラップして返す
 - クライアントでは `useError` / `clearError` を活用する
 - try/catchを使う場合、catchブロックで握りつぶさない
+
+---
+
+## セキュリティ（実装時）
+
+- `v-html` の使用は原則禁止（XSSリスク）。使用する場合はコメントで理由を明記し、入力値を必ずサニタイズする
+- `localStorage` / `sessionStorage` にトークン等の機密情報を保存しない
 
 ---
 
@@ -87,6 +99,8 @@ export function useCounter() {
 - グローバルな型は `app/types/` に配置する
 - API レスポンスの型は `app/types/api/` に配置する
 - Zodなどのバリデーションライブラリを使う場合、スキーマから型を推論する
+- Non-null assertion（`!`）は原則禁止。`?.` オプショナルチェーンか明示的な `null` チェックで代替する
+- 型キャスト（`as`）を使う場合はコメントで理由を明記する
 
 ### 非同期処理
 - `async/await` を使う（`.then().catch()` チェーンは避ける）
