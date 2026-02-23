@@ -13,6 +13,19 @@
 
 ---
 
+## 設計原則
+
+### YAGNI / KISS
+- YAGNI（You Aren't Gonna Need It）: 現時点で不要な機能・抽象化を作らない
+- KISS（Keep It Simple, Stupid）: シンプルな実装を優先し、不必要な複雑さを持ち込まない
+
+### DRY（Don't Repeat Yourself）
+- 同じロジックを複数箇所に書かない
+- 重複するロジックは Composables やユーティリティ関数に切り出す
+- 重複する定数はファイルに集約する
+
+---
+
 ## Vue / Nuxt 実装ルール
 
 ### Composition API
@@ -50,6 +63,10 @@ export function useCounter() {
   return { count, increment }
 }
 ```
+
+### コンポーネント設計
+- Props は読み取り専用。コンポーネント内で直接変更しない（単方向データフロー: props down, events up）
+- ロジックは Composables に切り出し、テンプレートは表示のみに集中させる
 
 ### Nuxt固有
 - データフェッチには `useFetch` / `useAsyncData` を使う（クライアント側の `fetch` は直接使わない）
